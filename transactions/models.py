@@ -48,6 +48,8 @@ class Sale(models.Model):
         default=0.0
     )
 
+    
+    
     class Meta:
         db_table = "sales"
         verbose_name = "Sale"
@@ -92,6 +94,8 @@ class SaleDetail(models.Model):
     )
     quantity = models.PositiveIntegerField()
     total_detail = models.DecimalField(max_digits=10, decimal_places=2)
+
+    
 
     class Meta:
         db_table = "sale_details"

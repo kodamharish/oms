@@ -10,7 +10,7 @@
     <style>
     .login-page {
       width: 360px;
-      padding: 8% 0 0;
+      padding: 2% 0 0;
       margin: auto;
     }
     .form {
@@ -102,9 +102,12 @@
       -moz-osx-font-smoothing: grayscale;
     }
     </style>
+    <div style="text-align:center;margin-bottom:20px;">
+        <img src="{% static 'images/logo.png' %}" width="260px">
+      </div>
     <div class="form">
       <div>
-        <strong class="navbar-brand" style="font-size: 26px;">Inventory<span class="text-warning">ms</span></strong>
+        <strong class="navbar-brand" style="font-size: 26px;">Order<span class="text-warning">ms</span></strong>
       </div>
       <div class="text-danger">
         {% if messages %} {% for message in messages %}

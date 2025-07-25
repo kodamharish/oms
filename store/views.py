@@ -43,6 +43,7 @@ from transactions.models import Sale
 from .models import Category, Item, Delivery
 from .forms import ItemForm, CategoryForm, DeliveryForm
 from .tables import ItemTable
+from accounts.models import *
 
 
 @login_required
@@ -50,6 +51,9 @@ def dashboard(request):
     profiles = Profile.objects.all()
     Category.objects.annotate(nitem=Count("item"))
     items = Item.objects.all()
+    categories = Category.objects.all()
+    customers = Customer.objects.all()
+    vendors = Vendor.objects.all()
     total_items = (
         Item.objects.all()
         .aggregate(Sum("quantity"))
@@ -57,6 +61,9 @@ def dashboard(request):
     )
     items_count = items.count()
     profiles_count = profiles.count()
+    categories_count = categories.count()
+    vendors_count = vendors.count()
+    customers_count = customers.count()
 
     # Prepare data for charts
     category_counts = Category.objects.annotate(
@@ -80,6 +87,9 @@ def dashboard(request):
         "profiles": profiles,
         "profiles_count": profiles_count,
         "items_count": items_count,
+        "categories_count":categories_count,
+        "vendors_count":vendors_count,
+        "customers_count":customers_count,
         "total_items": total_items,
         "vendors": Vendor.objects.all(),
         "delivery": Delivery.objects.all(),

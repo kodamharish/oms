@@ -1,8 +1,9 @@
 {% extends "store/base.html" %}
 {% load static %}
+{% load render_table from django_tables2 %}
+{% load querystring from django_tables2 %}
 {% block title %}Sales{% endblock title %}
 {% block content %}
-
 <!-- Header Section -->
 <div class="container my-4">
     <div class="card shadow-sm rounded p-3">
@@ -21,26 +22,28 @@
         </div>
     </div>
 </div>
-
 <div class="container px-3">
     <style>
         .table th,
         .table td {
             text-align: center;
         }
-    </style>
 
-    <table class="table table-bordered table-striped table-hover table-sm">
+        .btn-custom {
+            padding: 8px 20px;
+            margin: 4px;
+        }
+    </style>
+    <!-- <table class="table table-bordered table-striped table-hover table-sm">
         <thead class="thead-light">
             <tr>
                 <th>ID</th>
                 <th>Date</th>
                 <th>Customer</th>
-                <th>Items</th>
-                <th>Price</th>
-                <th>Quantity</th>
                 <th>Sub Total</th>
                 <th>Grand Total</th>
+                <th>Tax Amount</th>
+                <th>Tax Percentage</th>
                 <th>Amount Paid</th>
                 <th>Amount Change</th>
                 <th>Actions</th>
@@ -52,6 +55,60 @@
                 <td>{{ sale.id }}</td>
                 <td>{{ sale.date_added|date:"Y-m-d H:i:s" }}</td>
                 <td>{{ sale.customer }}</td>
+                <td>{{ sale.sub_total }}</td>
+                <td>{{ sale.grand_total }}</td>
+                <td>{{ sale.tax_amount }}</td>
+                <td>{{ sale.tax_percentage }}</td>
+                <td>{{ sale.amount_paid }}</td>
+                <td>{{ sale.amount_change }}</td>
+                
+                <td>
+                    <a class="text-primary" href="{% url 'sale-detail' sale.id %}">
+                        <i class="fa-solid fa-eye"></i> 
+                    </a>
+                    
+                    <a class="text-info" href="#">
+                        <i class="fa-solid fa-pen"></i>
+                    </a>
+                    
+                    
+                    <a class="text-danger" href="#">
+                        <i class="fa-solid fa-trash"></i>
+                    </a>
+                    
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table> -->
+
+
+    <table class="table table-bordered table-striped table-hover table-sm">
+        <thead class="thead-light">
+            <tr>
+                <th>ID</th>
+                <th>Date</th>
+                <th>Customer</th>
+                <th>Items</th> <!-- New -->
+                <th>Price</th> <!-- New -->
+                <th>Quantity</th> <!-- New -->
+                <th>Sub Total</th>
+                <th>Grand Total</th>
+                <!-- <th>Tax Amount</th>
+            <th>Tax Percentage</th> -->
+                <th>Amount Paid</th>
+                <th>Amount Change</th>
+
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for sale in sales %}
+            <tr>
+                <td>{{ sale.id }}</td>
+                <td>{{ sale.date_added|date:"Y-m-d H:i:s" }}</td>
+                <td>{{ sale.customer }}</td>
+                <!-- Items Column -->
                 <td>
                     <ul class="list-unstyled mb-0">
                         {% for detail in sale.saledetail_set.all %}
@@ -59,6 +116,7 @@
                         {% endfor %}
                     </ul>
                 </td>
+                <!-- Price Column -->
                 <td>
                     <ul class="list-unstyled mb-0">
                         {% for detail in sale.saledetail_set.all %}
@@ -66,6 +124,9 @@
                         {% endfor %}
                     </ul>
                 </td>
+
+
+                <!-- Quantity Column -->
                 <td>
                     <ul class="list-unstyled mb-0">
                         {% for detail in sale.saledetail_set.all %}
@@ -73,27 +134,43 @@
                         {% endfor %}
                     </ul>
                 </td>
+
+
                 <td>{{ sale.sub_total }}</td>
                 <td>{{ sale.grand_total }}</td>
+                <!-- <td>{{ sale.tax_amount }}</td>
+            <td>{{ sale.tax_percentage }}</td> -->
                 <td>{{ sale.amount_paid }}</td>
                 <td>{{ sale.amount_change }}</td>
+
+
                 <td>
                     <a class="text-primary" href="{% url 'sale-detail' sale.id %}">
                         <i class="fa-solid fa-eye"></i>
                     </a>
-                    <a class="text-info" href="#">
-                        <i class="fa-solid fa-pen"></i>
-                    </a>
-                    <a href="#" class="text-danger delete-sale" data-sale-id="{{ sale.id }}">
-                        <i class="fa-solid fa-trash"></i>
-                    </a>
+                    <a class="text-info" href="#"><i class="fa-solid fa-pen"></i></a>
+                    <a class="text-danger" href="#"><i class="fa-solid fa-trash"></i></a>
                 </td>
+
+
+                <!-- {% for detail in sale.saledetail_set.all %}
+
+                <td>
+                    <a class="text-primary" href="{% url 'sale-detail' sale.id %}">
+                        <i class="fa-solid fa-eye"></i>
+                    </a>
+                    <a href="{% url 'sale-detail-edit' detail.id %}">Edit</a>
+                    <a href="{% url 'sale-detail-delete' detail.id %}">Delete</a>
+                </td>
+
+                {% endfor %} -->
+
             </tr>
             {% endfor %}
         </tbody>
     </table>
 
-    <!-- Pagination -->
+
     <div class="d-flex justify-content-center mt-4">
         {% if is_paginated %}
         <nav aria-label="Page navigation">
@@ -113,9 +190,13 @@
                 {% endif %}
                 {% for i in paginator.page_range %}
                 {% if page_obj.number == i %}
-                <li class="page-item active"><span class="page-link">{{ i }}</span></li>
+                <li class="page-item active">
+                    <span class="page-link">{{ i }} <span class="sr-only">(current)</span></span>
+                </li>
                 {% else %}
-                <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                </li>
                 {% endif %}
                 {% endfor %}
                 {% if page_obj.has_next %}
@@ -136,56 +217,4 @@
         {% endif %}
     </div>
 </div>
-
-<!-- CSRF Token for JavaScript -->
-<meta name="csrf-token" content="{{ csrf_token }}">
-
-<!-- SweetAlert2 Script -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-<!-- Sweet Alert -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.6.15/dist/sweetalert2.all.min.js" defer></script>
-
-
-<!-- JavaScript for SweetAlert Delete -->
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    const deleteButtons = document.querySelectorAll(".delete-sale");
-
-    deleteButtons.forEach(button => {
-        button.addEventListener("click", function (e) {
-            e.preventDefault();
-            const saleId = this.getAttribute("data-sale-id");
-            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-            Swal.fire({
-                title: "Are you sure?",
-                text: "You won't be able to undo this!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#d33",
-                cancelButtonColor: "#3085d6",
-                confirmButtonText: "Yes, delete it!"
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    const form = document.createElement('form');
-                    form.method = 'POST';
-                    //form.action = `/sales/delete/${saleId}/`;
-                    form.action = `/transactions/sales/delete/${saleId}/`;
-
-                    const csrfInput = document.createElement('input');
-                    csrfInput.type = 'hidden';
-                    csrfInput.name = 'csrfmiddlewaretoken';
-                    csrfInput.value = csrfToken;
-
-                    form.appendChild(csrfInput);
-                    document.body.appendChild(form);
-                    form.submit();
-                }
-            });
-        });
-    });
-});
-</script>
-
 {% endblock content %}

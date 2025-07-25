@@ -13,12 +13,37 @@
         <main class="py-6 bg-surface-secondary">
             <div class="container-fluid">
                 <!-- Card stats -->
-                <div class="row g-6 mb-6">
+                 <div class="row g-6 mb-6">
                     <style>
                         a {
                             text-decoration: none;
                         }
                     </style>
+                    <div class="col-xl-3 col-sm-6 col-12" id="categories">
+                        <a href="{% url 'category-list' %}">
+                            <div class="card shadow border-0">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <span class="h6 font-semibold text-muted text-sm d-block mb-2">Categories</span>
+                                            <span class="h3 font-bold mb-0">{{categories_count}}</span>
+                                        </div>
+                                        <div class="col-auto">
+                                            <div class="icon icon-shape bg-tertiary text-white text-lg rounded-circle">
+                                                <i class="fa fa-clipboard-list"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-2 mb-0 text-sm">
+                                        <span class="badge badge-pill bg-soft-success text-success me-2">
+                                            <i class="fa fa-arrow-up me-1"></i>13%
+                                        </span>
+                                        <span class="text-nowrap text-xs text-muted">Since last month</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
                     <div class="col-xl-3 col-sm-6 col-12" id="products">
                         <a href="{% url 'productslist' %}">
                             <div class="card shadow border-0">
@@ -26,7 +51,90 @@
                                     <div class="row">
                                         <div class="col">
                                             <span class="h6 font-semibold text-muted text-sm d-block mb-2">Products</span>
+                                            <span class="h3 font-bold mb-0">{{items_count}}</span>
+                                        </div>
+                                        <div class="col-auto">
+                                            <div class="icon icon-shape bg-tertiary text-white text-lg rounded-circle">
+                                                <i class="fa fa-clipboard-list"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-2 mb-0 text-sm">
+                                        <span class="badge badge-pill bg-soft-success text-success me-2">
+                                            <i class="fa fa-arrow-up me-1"></i>13%
+                                        </span>
+                                        <span class="text-nowrap text-xs text-muted">Since last month</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-xl-3 col-sm-6 col-12" id="quantities">
+                        <a href="{% url 'productslist' %}">
+                            <div class="card shadow border-0">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <span class="h6 font-semibold text-muted text-sm d-block mb-2">Quantity</span>
                                             <span class="h3 font-bold mb-0">{{total_items}}</span>
+                                        </div>
+                                        <div class="col-auto">
+                                            <div class="icon icon-shape bg-primary text-white text-lg rounded-circle">
+                                                <i class="fa-solid fa fa-users"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-2 mb-0 text-sm">
+                                        <span class="badge badge-pill bg-soft-success text-success me-2">
+                                            <i class="fa fa-arrow-up me-1"></i>30%
+                                        </span>
+                                        <span class="text-nowrap text-xs text-muted">Since last month</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-xl-3 col-sm-6 col-12" id="vendors">
+                        <a href="{% url 'vendor-list' %}">
+                            <div class="card shadow border-0">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <span class="h6 font-semibold text-muted text-sm d-block mb-2">Vendors</span>
+                                            <span class="h3 font-bold mb-0">{{vendors_count}}</span>
+                                        </div>
+                                        <div class="col-auto">
+                                            <div class="icon icon-shape bg-info text-white text-lg rounded-circle">
+                                                <i class="fa fa-truck"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-2 mb-0 text-sm">
+                                        <span class="badge badge-pill bg-soft-danger text-danger me-2">
+                                            <i class="fa fa-arrow-down me-1"></i>-5%
+                                        </span>
+                                        <span class="text-nowrap text-xs text-muted">Since last month</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    
+                </div>
+                <div class="row g-6 mb-6">
+                    <style>
+                        a {
+                            text-decoration: none;
+                        }
+                    </style>
+                    <div class="col-xl-3 col-sm-6 col-12" id="customers">
+                        <a href="{% url 'customer_list' %}">
+                            <div class="card shadow border-0">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <span class="h6 font-semibold text-muted text-sm d-block mb-2">Customers</span>
+                                            <span class="h3 font-bold mb-0">{{customers_count}}</span>
                                         </div>
                                         <div class="col-auto">
                                             <div class="icon icon-shape bg-tertiary text-white text-lg rounded-circle">

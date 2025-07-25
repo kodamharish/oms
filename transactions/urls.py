@@ -18,6 +18,7 @@ from .views import (
     export_sales_to_excel,
     export_purchases_to_excel
 )
+from .views import SaleDetailUpdateView, SaleDetailDeleteView
 
 # URL patterns
 urlpatterns = [
@@ -44,15 +45,21 @@ urlpatterns = [
     path('sales/', SaleListView.as_view(), name='saleslist'),
     path('sale/<int:pk>/', SaleDetailView.as_view(), name='sale-detail'),
     path('new-sale/', SaleCreateView, name='sale-create'),
-    path(
-         'sale/<slug:slug>/delete/', SaleDeleteView.as_view(),
-         name='sale-delete'
-     ),
+    # path(
+    #      'sale/<slug:slug>/delete/', SaleDeleteView.as_view(),
+    #      name='sale-delete'
+    #  ),
 
     # Sales and purchases export
     path('sales/export/', export_sales_to_excel, name='sales-export'),
     path('purchases/export/', export_purchases_to_excel,
          name='purchases-export'),
+    path('sale-detail/<int:pk>/edit/', SaleDetailUpdateView.as_view(), name='sale-detail-edit'),
+    path('sale-detail/<int:pk>/delete/', SaleDetailDeleteView.as_view(), name='sale-detail-delete'),
+    # urls.py
+    path('sales/delete/<int:pk>/', SaleDeleteView.as_view(), name='sale-delete'),
+
+    
 ]
 
 # Static media files configuration for development

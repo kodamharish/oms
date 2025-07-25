@@ -5,7 +5,7 @@ import logging
 # Django core imports
 from django.http import JsonResponse, HttpResponse
 from django.urls import reverse
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.db import transaction
 
 # Class-based views
@@ -271,25 +271,38 @@ def SaleCreateView(request):
     return render(request, "transactions/sale_create.html", context=context)
 
 
-class SaleDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
-    """
-    View to delete a sale.
-    """
 
-    model = Sale
-    template_name = "transactions/saledelete.html"
 
-    def get_success_url(self):
-        """
-        Redirect to the sales list after successful deletion.
-        """
-        return reverse("saleslist")
 
-    def test_func(self):
-        """
-        Allow deletion only for superusers.
-        """
-        return self.request.user.is_superuser
+
+
+
+
+
+
+
+
+
+
+# class SaleDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+#     """
+#     View to delete a sale.
+#     """
+
+#     model = Sale
+#     template_name = "transactions/saledelete.html"
+
+#     def get_success_url(self):
+#         """
+#         Redirect to the sales list after successful deletion.
+#         """
+#         return reverse("saleslist")
+
+#     def test_func(self):
+#         """
+#         Allow deletion only for superusers.
+#         """
+#         return self.request.user.is_superuser
 
 
 class PurchaseListView(LoginRequiredMixin, ListView):
@@ -363,3 +376,91 @@ class PurchaseDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         Allow deletion only for superusers.
         """
         return self.request.user.is_superuser
+
+
+
+
+
+from django.views.generic import UpdateView, DeleteView
+from django.urls import reverse_lazy
+from .models import SaleDetail
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+
+class SaleDetailUpdateView(LoginRequiredMixin, UpdateView):
+    model = SaleDetail
+    fields = ['item', 'price', 'quantity']
+    template_name = 'transactions/sale_detail_form.html'
+
+    def get_success_url(self):
+        return reverse_lazy('saleslist')  # or 'sale-detail' with sale.id
+
+
+class SaleDetailDeleteView(LoginRequiredMixin, DeleteView):
+    model = SaleDetail
+    # template_name = 'transactions/sale_detail_confirm_delete.html'
+    template_name = 'transactions/saledelete.html'
+
+    def get_success_url(self):
+        return reverse_lazy('saleslist')  # or 'sale-detail' with sale.id
+
+
+# views.py
+# from django.views.generic import DeleteView
+# from django.urls import reverse_lazy
+# from .models import Sale
+
+# class SaleDeleteView(DeleteView):
+#     model = Sale
+#     success_url = reverse_lazy('saleslist')  # replace with your actual sales list URL name
+
+
+
+
+from django.views.generic import DeleteView
+from django.urls import reverse_lazy
+from django.shortcuts import get_object_or_404
+from .models import Sale, SaleDetail
+from store.models import Item
+from django.db import transaction
+
+class SaleDeleteView_old(DeleteView):
+    model = Sale
+    success_url = reverse_lazy('saleslist')  # your sales list URL
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+
+        with transaction.atomic():
+            # Restore item quantities
+            for detail in self.object.saledetail_set.all():
+                print(item)
+                item = detail.item
+                item.quantity += detail.quantity
+                item.save()
+
+            # Now delete the sale
+            return super().delete(request, *args, **kwargs)
+
+
+from django.http import HttpResponseNotAllowed
+
+class SaleDeleteView(DeleteView):
+    model = Sale
+    success_url = reverse_lazy('saleslist')
+
+    def get(self, request, *args, **kwargs):
+        # Prevent rendering confirmation page
+        return HttpResponseNotAllowed(['POST'])
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        with transaction.atomic():
+            for detail in self.object.saledetail_set.all():
+                item = detail.item
+                item.quantity += detail.quantity
+                item.save()
+
+            self.object.delete()
+
+        return redirect(self.success_url)

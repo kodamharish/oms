@@ -1,0 +1,22 @@
+{% extends "store/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <h3>Edit Sale Detail</h3>
+    <form method="post">
+        {% csrf_token %}
+        <div class="card p-4 shadow-sm">
+            {{ form.as_p }}
+            <div class="mt-3">
+                <button type="submit" class="btn btn-success">
+                    <i class="fa fa-save"></i> Save Changes
+                </button>
+                <a href="{% url 'saleslist' %}" class="btn btn-secondary">
+                    Cancel
+                </a>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}
