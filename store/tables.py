@@ -16,6 +16,24 @@ class ItemTable(tables.Table):
         order_by_field = 'sort'
 
 
+
+import django_tables2 as tables
+from .models import ItemProduction
+
+class ItemProductionTable(tables.Table):
+    """
+    Table representation for ItemProduction model.
+    """
+    class Meta:
+        model = ItemProduction
+        template_name = "django_tables2/semantic.html"
+        fields = (
+            'id', 'item', 'produced_quantity', 'production_date',
+        )
+        order_by_field = 'sort'
+
+
+
 class DeliveryTable(tables.Table):
     """
     Table representation for Delivery model.

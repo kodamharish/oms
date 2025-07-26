@@ -186,6 +186,74 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
             return True
 
 
+
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic.edit import CreateView
+from django.urls import reverse_lazy
+from .models import ItemProduction
+from .forms import ItemProductionForm
+
+
+class ItemProductionCreateView(LoginRequiredMixin, CreateView):
+    """
+    View class to create a new daily item production record.
+
+    Attributes:
+    - model: The model associated with the view.
+    - template_name: The HTML template used for rendering the view.
+    - form_class: The form class used for data input.
+    - success_url: The URL to redirect to upon successful form submission.
+    """
+
+    model = ItemProduction
+    template_name = "store/productioncreate.html"
+    form_class = ItemProductionForm
+    #success_url = reverse_lazy("products")  # Change to your desired success URL
+    success_url = "/products"
+
+    def test_func(self):
+        # item = Item.objects.get(id=pk)
+        if self.request.POST.get("produced_quantity") < 1:
+            return False
+        else:
+            return True
+
+
+    def form_valid(self, form):
+        """
+        Optionally update the item's quantity when production is added.
+        """
+        response = super().form_valid(form)
+
+        # Update item quantity
+        item = form.cleaned_data['item']
+        produced_quantity = form.cleaned_data['produced_quantity']
+        item.quantity += produced_quantity
+        item.save()
+
+        return response
+    
+
+
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django_tables2.views import SingleTableView
+from django_tables2.export.views import ExportMixin
+from .models import ItemProduction
+from .tables import ItemProductionTable
+
+class ProductionListView(LoginRequiredMixin, ExportMixin, SingleTableView):
+    """
+    View class to display a list of item productions.
+    """
+    model = ItemProduction
+    table_class = ItemProductionTable
+    template_name = "store/productionlist.html"
+    context_object_name = "productions"
+    paginate_by = 10
+    SingleTableView.table_pagination = False
+
+
+
 class ProductUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     """
     View class to update product information.

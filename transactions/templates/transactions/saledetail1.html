@@ -401,15 +401,61 @@
 				<!-- <p class="bold">P.O BOX. 90420-80100 MSA</p> -->
 				<p>Date: {{ sale.date_added|date:"d/m/Y H:i:s" }}</p>
 				<p>Receipt code: IMS{{ sale.id }}</p>
-
-				<!-- {% for detail in sale.saledetail_set.all %}
+				<!-- <div class="code-barre">
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+				</div> -->
+				{% for detail in sale.saledetail_set.all %}
 				{{ detail.item.name }}
-				{% endfor %} -->
-
-				{% for detail in sale.saledetail_set.all|dictsort:"item.name" %}
-				{{ detail.item.name }}<br>
 				{% endfor %}
-
 
 
 

@@ -34,7 +34,7 @@ class Profile(models.Model):
         populate_from='email'
     )
     profile_picture = ProcessedImageField(
-        default='profile_pics/default.jpg',
+        default='logo.png',
         upload_to='profile_pics',
         format='JPEG',
         processors=[ResizeToFill(150, 150)],

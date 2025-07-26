@@ -22,7 +22,9 @@ from .views import (
     CategoryDetailView,
     CategoryCreateView,
     CategoryUpdateView,
-    CategoryDeleteView
+    CategoryDeleteView,
+    ItemProductionCreateView,
+    ProductionListView
 )
 
 # URL patterns
@@ -46,6 +48,8 @@ urlpatterns = [
         ProductCreateView.as_view(),
         name='product-create'
     ),
+    path('production-add/', ItemProductionCreateView.as_view(), name='production-create'),
+    path('productions/', ProductionListView.as_view(), name='production-list'),
     path(
         'product/<slug:slug>/update/',
         ProductUpdateView.as_view(),

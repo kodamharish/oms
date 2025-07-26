@@ -47,6 +47,16 @@ class DeliveryAdmin(admin.ModelAdmin):
     ordering = ('-date',)
 
 
+from .models import Item, ItemProduction
+
+class ItemProductionAdmin(admin.ModelAdmin):
+    list_display = ['item', 'production_date', 'produced_quantity']
+    list_filter = ['production_date', 'item']
+
+admin.site.register(ItemProduction, ItemProductionAdmin)
+
+
+
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Item, ItemAdmin)
 admin.site.register(Delivery, DeliveryAdmin)

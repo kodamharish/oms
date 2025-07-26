@@ -43,6 +43,30 @@ class ItemForm(forms.ModelForm):
         }
 
 
+from django import forms
+from .models import ItemProduction
+
+class ItemProductionForm(forms.ModelForm):
+    """
+    A form for recording daily production of an Item.
+    """
+    class Meta:
+        model = ItemProduction
+        fields = ['item', 'produced_quantity', 'production_date']
+        widgets = {
+            'item': forms.Select(attrs={'class': 'form-control'}),
+            'produced_quantity': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
+            'production_date': forms.DateInput(
+                attrs={
+                    'class': 'form-control',
+                    'type': 'datetime-local'
+                }
+            ),
+        }
+
+
+
+
 class CategoryForm(forms.ModelForm):
     """
     A form for creating or updating category.

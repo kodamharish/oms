@@ -78,6 +78,21 @@ class Item(models.Model):
         verbose_name_plural = 'Items'
 
 
+
+class ItemProduction(models.Model):
+    item = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='productions')
+    production_date = models.DateTimeField()
+    produced_quantity = models.PositiveIntegerField()
+
+    def __str__(self):
+        return f"{self.item.name} - {self.production_date} - {self.produced_quantity} units"
+
+    class Meta:
+        unique_together = ('item', 'production_date')  # One entry per day per item
+        ordering = ['-production_date']
+
+
+
 class Delivery(models.Model):
     """
     Represents a delivery of an item to a customer.
